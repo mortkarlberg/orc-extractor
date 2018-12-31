@@ -21,5 +21,5 @@ File Root
 ~~~
 
 ### Resources
-http://www.vgmpf.com/Wiki/index.php?title=ORC
-http://www.vgmpf.com/Wiki/index.php?title=RMI
+* http://www.vgmpf.com/Wiki/index.php?title=ORC
+* http://www.vgmpf.com/Wiki/index.php?title=RMI
