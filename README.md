@@ -30,3 +30,4 @@ File Root
 * http://www.vgmpf.com/Wiki/index.php?title=RMI
 * http://www.vgmpf.com/Wiki/index.php?title=MIDI
 * http://www.vgmpf.com/Wiki/index.php?title=Digital_Orchestrator_Pro
+* RIFF explained - http://www.tactilemedia.com/info/MCI_Control_Info.html
