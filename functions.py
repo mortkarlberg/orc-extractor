@@ -5,12 +5,10 @@ Created on Wed Feb 20 19:08:16 2019
 @author: Mårten
 """
 
-import constant
-
-def check_riff_header(file):
-    bytes = file.read(4)
+def check_riff_header(file, header_name):
+    bytes = file.read(len(header_name))
     print(bytes)
-    if constant.RIFF_HEADER_START != bytes:
+    if header_name != bytes:
         print("Unknown file content.")
         exit()
 
