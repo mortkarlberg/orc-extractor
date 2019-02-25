@@ -6,17 +6,19 @@ Created on Wed Feb 20 19:08:16 2019
 """
 
 def check_riff_header(file, header_name):
-    bytes = file.read(len(header_name))
+    header_bytes = file.read(len(header_name))
     print(bytes)
-    if header_name != bytes:
-        print("Unknown file content.")
+    if header_name != header_bytes:
+        print("Unknown file content.", header_bytes)
         exit()
 
-    bytes = file.read(4)
-    ckSize = int.from_bytes(bytes, "little")
-    print(ckSize)
+    size_bytes = file.read(4)
+    size = int.from_bytes(size_bytes, "little")
 
-    return ckSize
+    read_bytes = header_bytes + size_bytes
+    print(size, read_bytes)
+
+    return size, read_bytes
 
 def extract_data_chunk(in_file, out_path, data_size, pad_bytes = 0):
     data = in_file.read(data_size)

@@ -18,7 +18,7 @@ out_wave_voyl = Path("data/iowords-wave-voyl.wow")
 print(in_orc)
 print(in_orc.stat().st_size / 1024, "kB")
 
-with in_orc.open("rb") as orc_file: 
+with in_orc.open("rb") as orc_file:
     # MIDI
     # 1. read riff header ckID = RIFF (chID = A four-character code that identifies the representation of the chunk data data. A program reading a RIFF file can skip over any chunk whose chunk ID it doesnt recognize; it simply skips the number of bytes specified by ckSize plus the pad byte, if present.)
     # 2. read ckSize (A 32-bit unsigned value identifying the size of ckData. This size value does not include the size of the ckID or ckSize fields or the pad byte at the end of ckData.)
@@ -27,10 +27,10 @@ with in_orc.open("rb") as orc_file:
 
     print(" --- MIDI ---")
 
-    riff_size = functions.check_riff_header(orc_file, constant.RIFF_HEADER_START)
-    midi_size = functions.check_riff_header(orc_file, constant.RIFF_HEADER_MIDI)
+    riff_size, header = functions.check_riff_header(orc_file, constant.RIFF_HEADER_START)
+    midi_size, header = functions.check_riff_header(orc_file, constant.RIFF_HEADER_MIDI)
     midi_pad_bytes = riff_size - midi_size - len(constant.RIFF_HEADER_MIDI) - constant.RIFF_HEADER_SIZE_BYTES
-    print(midi_pad_bytes)
+    print("MIDI pad bytes:", midi_pad_bytes)
 
     functions.extract_data_chunk(orc_file, out_midi, midi_size, midi_pad_bytes)
 
@@ -42,14 +42,14 @@ with in_orc.open("rb") as orc_file:
 
     print(" --- WAVE ---")
 
-    wave_size = functions.check_riff_header(orc_file, constant.RIFF_HEADER_START)
-    format_size = functions.check_riff_header(orc_file, constant.RIFF_HEADER_WAVE_START)
+    wave_size, riff = functions.check_riff_header(orc_file, constant.RIFF_HEADER_START)
+    format_size, format = functions.check_riff_header(orc_file, constant.RIFF_HEADER_WAVE_START)
     functions.extract_data_chunk(orc_file, out_wave_format, format_size)
 
-    voyl_size = functions.check_riff_header(orc_file, constant.RIFF_HEADER_WAVE_VOYL)
+    voyl_size, voyl = functions.check_riff_header(orc_file, constant.RIFF_HEADER_WAVE_VOYL)
     functions.extract_data_chunk(orc_file, out_wave_voyl, voyl_size, voyl_size % 4)
 
-    data_size = functions.check_riff_header(orc_file, constant.RIFF_HEADER_WAVE_DATA)
+    data_size, data = functions.check_riff_header(orc_file, constant.RIFF_HEADER_WAVE_DATA)
     functions.extract_data_chunk(orc_file, out_wave_data, data_size)
 
     print("Successfully extracted", in_orc)
