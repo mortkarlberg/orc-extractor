@@ -29,3 +29,10 @@ def extract_data_chunk(in_file, out_path, data_size, pad_bytes = 0):
 
     if pad_bytes:
         in_file.read(pad_bytes)
+
+    return data
+
+def append(out_path, data):
+    with out_path.open("ab") as out:
+        for chunk in data:
+            out.write(chunk)

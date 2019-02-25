@@ -14,6 +14,7 @@ out_midi = Path("data/iowords.mid")
 out_wave_format = Path("data/iowords-wave-format.wow")
 out_wave_data = Path("data/iowords-wave-data.wow")
 out_wave_voyl = Path("data/iowords-wave-voyl.wow")
+out_full_wave = Path("data/iowords.wav")
 
 print(in_orc)
 print(in_orc.stat().st_size / 1024, "kB")
@@ -42,14 +43,17 @@ with in_orc.open("rb") as orc_file:
 
     print(" --- WAVE ---")
 
-    wave_size, riff = functions.check_riff_header(orc_file, constant.RIFF_HEADER_START)
-    format_size, format = functions.check_riff_header(orc_file, constant.RIFF_HEADER_WAVE_START)
-    functions.extract_data_chunk(orc_file, out_wave_format, format_size)
+    wave_size, riff_header = functions.check_riff_header(orc_file, constant.RIFF_HEADER_START)
 
-    voyl_size, voyl = functions.check_riff_header(orc_file, constant.RIFF_HEADER_WAVE_VOYL)
-    functions.extract_data_chunk(orc_file, out_wave_voyl, voyl_size, voyl_size % 4)
+    format_size, format_header = functions.check_riff_header(orc_file, constant.RIFF_HEADER_WAVE_START)
+    format_data = functions.extract_data_chunk(orc_file, out_wave_format, format_size)
 
-    data_size, data = functions.check_riff_header(orc_file, constant.RIFF_HEADER_WAVE_DATA)
-    functions.extract_data_chunk(orc_file, out_wave_data, data_size)
+    voyl_size, voyl_header = functions.check_riff_header(orc_file, constant.RIFF_HEADER_WAVE_VOYL)
+    voyl_data = functions.extract_data_chunk(orc_file, out_wave_voyl, voyl_size, voyl_size % 4)
+
+    data_size, data_header = functions.check_riff_header(orc_file, constant.RIFF_HEADER_WAVE_DATA)
+    wave_data = functions.extract_data_chunk(orc_file, out_wave_data, data_size)
+
+    functions.append(out_full_wave, [riff_header, format_header, format_data, data_header, wave_data])
 
     print("Successfully extracted", in_orc)
