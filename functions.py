@@ -18,10 +18,10 @@ def check_riff_header(file, header_name):
 
     return ckSize
 
-def extract_data_chunk(in_file, out_file, data_size, pad_bytes = 0):
+def extract_data_chunk(in_file, out_path, data_size, pad_bytes = 0):
     data = in_file.read(data_size)
 
-    with open(out_file, "wb") as out:
+    with out_path.open("wb") as out:
         num_bytes_written = out.write(data)
         print(num_bytes_written)
 
